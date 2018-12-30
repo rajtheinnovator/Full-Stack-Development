@@ -53,3 +53,37 @@ Once, both Python and SQLAlchemy are setup properly, run Python by typing `$ pyt
 >>> 	print item.name
 ```
 
+### CRUD-Update:
+
+#### Filter item of interest by name first
+```
+>>> veggieBurgers = session.query(MenuItem).filter_by(name = 'Veggie Burger')
+>>> for veggieBurger in veggieBurgers:
+...     print veggieBurger.id
+...     print veggieBurger.price
+...     print veggieBurger.restaurant.name
+...     print "\n"
+
+```
+
+Then choose one particular item by id, to be updated
+```
+>>> urbanVeggieBurger = session.query(MenuItem).filter_by(id = 8).one()
+>>> print urbanVeggieBurger.price
+```
+Then update the selected item:
+```
+>>> urbanVeggieBurger.price = '$2.99'
+>>> session.add(urbanVeggieBurger)
+>>> session.commit()
+```
+
+Now verify if the update was done successfully:
+```
+>>> veggieBurgers = session.query(MenuItem).filter_by(name = 'Veggie Burger')
+>>> for veggieBurger in veggieBurgers:
+...     print veggieBurger.id
+...     print veggieBurger.restaurant.name
+...     print veggieBurger.price
+...     print "\n"
+```
