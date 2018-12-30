@@ -105,3 +105,17 @@ Now verify if the update was done successfully:
 ...     print veggieBurger.restaurant.name
 ...     print "\n"
 ```
+
+### CRUD-Delete:
+#### Delete a single item:
+```
+>>> spinach = session.query(MenuItem).filter_by(name = 'Spinach Ice Cream').one()
+>>> print spinach.restaurant.name
+Auntie Ann's Diner'
+>>> session.delete(spinach)
+>>> session.commit()
+```
+#### Check if the item was actually deleted or not by quetying for it. If it was deleted, python will throw an error that row doesn't exist
+```
+>>> spinach = session.query(MenuItem).filter_by(name = 'Spinach Ice Cream').one()
+```
