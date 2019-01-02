@@ -56,6 +56,7 @@ class webServerHandler(BaseHTTPRequestHandler):
                     contents += "</br>"
                 output = ""
                 output += "<html><body>"
+                output += "<h1> <a href = '/restaurants/new'>Make a new restaurant here </a></h1>"
                 output += "<h1> %s </h1>" % contents
                 output += "</body></html>"
                 self.wfile.write(output)
