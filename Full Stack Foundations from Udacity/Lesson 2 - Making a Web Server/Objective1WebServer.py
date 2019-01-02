@@ -49,6 +49,11 @@ class webServerHandler(BaseHTTPRequestHandler):
                 for item in items:
                     contents += item.name
                     contents += "</br>"
+                    contents += "<a href '#'> Edit</a>"
+                    contents += "</br>"
+                    contents += "<a href '#'> Delete</a>"
+                    contents += "</br>"
+                    contents += "</br>"
                 output = ""
                 output += "<html><body>"
                 output += "<h1> %s </h1>" % contents
