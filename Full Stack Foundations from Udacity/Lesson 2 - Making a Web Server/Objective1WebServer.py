@@ -124,6 +124,26 @@ class webServerHandler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         try:
+            if self.path.endswith("/delete"):
+                ctype, pdict = cgi.parse_header(
+                    self.headers.getheader('content-type'))
+                if ctype == 'multipart/form-data':
+                    fields = cgi.parse_multipart(self.rfile, pdict)
+                    messagecontent = fields.get('newRestaurantName')
+                    restaurantIDPath = self.path.split("/")[2]
+                    engine = create_engine('sqlite:///restaurantmenu.db')
+                    Base.metadata.bind = engine
+                    DBSession = sessionmaker(bind = engine)
+                    session = DBSession()
+                    myRestaurantQuery = session.query(Restaurant).filter_by(id=restaurantIDPath).one()
+                    if myRestaurantQuery != []:
+                        session.delete(myRestaurantQuery)
+                        session.commit()
+                        self.send_response(301)
+                        self.send_header('Content-type', 'text/html')
+                        self.send_header('Location', '/restaurants')
+                        self.end_headers()
+
             if self.path.endswith("/edit"):
                 ctype, pdict = cgi.parse_header(
                     self.headers.getheader('content-type'))
