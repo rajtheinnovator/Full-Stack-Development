@@ -47,6 +47,26 @@ class webServerHandler(BaseHTTPRequestHandler):
                 self.wfile.write(output)
                 print output
                 return
+            if self.path.endswith("/delete"):
+                restaurantIDPath = self.path.split("/")[2]
+                engine = create_engine('sqlite:///restaurantmenu.db')
+                Base.metadata.bind = engine
+                DBSession = sessionmaker(bind = engine)
+                session = DBSession()
+                myRestaurantQuery = session.query(Restaurant).filter_by(id=restaurantIDPath).one()
+                if myRestaurantQuery:
+                    self.send_response(200)
+                    self.send_header('Content-type', 'text/html')
+                    self.end_headers()
+                    output = "<html><body>"
+                    output += "<h1>Are you sure you want to delete %s </h1>" % myRestaurantQuery.name
+                    output += "<form method='POST' enctype='multipart/form-data' action = '/restaurants/%s/delete' >" % restaurantIDPath
+                    output += "<input type = 'submit' value = 'Delete'>"
+                    output += "</form>"
+                    output += "</body></html>"
+                    self.wfile.write(output)
+
+
             if self.path.endswith("/edit"):
                 restaurantIDPath = self.path.split("/")[2]
                 engine = create_engine('sqlite:///restaurantmenu.db')
@@ -68,6 +88,7 @@ class webServerHandler(BaseHTTPRequestHandler):
                     output += "</form>"
                     output += "</body></html>"
                     self.wfile.write(output)
+
             if self.path.endswith("/restaurants"):
                 self.send_response(200)
                 self.send_header('Content-type', 'text/html')
@@ -86,7 +107,7 @@ class webServerHandler(BaseHTTPRequestHandler):
                     contents += "</br>"
                     contents += "<a href ='/restaurants/%s/edit' >Edit </a> " % item.id
                     contents += "</br>"
-                    contents += "<a href '#'> Delete</a>"
+                    contents += "<a href ='/restaurants/%s/delete' >Delete </a> " % item.id
                     contents += "</br>"
                     contents += "</br>"
                 output = ""
