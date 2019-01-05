@@ -72,4 +72,28 @@ def HelloWorld():
 if __name__ == '__main__':
 	app.debug = True
 	app.run(host = '0.0.0.0', port = 5000)
-	```
+```
+
+# Routing:
+
+#### Add different routes to take the user to a restaurant menu through their ID
+#### Urls/routes can be created inside a `<>` block in which you first assign the type of the argument and then its value, like `<int: 5.`
+```
+@app.route('/')
+@app.route('/restaurants/<int:restaurant_id>/')
+def restaurantMenu(restaurant_id):
+	DBSession = sessionmaker(bind=engine)
+	session = DBSession()
+	restaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
+	items = session.query(MenuItem).filter_by(restaurant_id = restaurant_id)
+	output =''
+	for i in items:
+		output += i.name
+		output += '</br'
+		output += i.price
+		output += '</br'
+		output += i.description
+		output += '</br'
+		output += '</br'
+	return output
+```
