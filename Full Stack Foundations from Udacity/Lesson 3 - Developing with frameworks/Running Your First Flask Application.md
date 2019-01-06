@@ -230,3 +230,43 @@ if __name__ == '__main__':
 	app.debug = True
 	app.run(host = '0.0.0.0', port = 5000)
 ```
+
+### Adding url_for to add **Edit** and **Delete** link(only change would be in the template or html file):
+```
+<html>
+
+<body>
+
+<h1>{{restaurant.name}}</h1>
+
+
+{% for i in items %}
+
+<div>
+
+<p>{{i.name}}</p>
+
+</br>
+
+<p>{{i.description}}</p>
+
+</br>
+
+<p> {{i.price}} </p>
+
+</br>
+
+<a href="{{url_for('editMenuItem', restaurant_id = restaurant.id, menu_id = i.id) }}">Edit</a>
+
+</br>
+
+<a href = "{{url_for('deleteMenuItem', restaurant_id = restaurant.id, menu_id = i.id ) }}">Delete</a>
+
+</div>
+
+
+{% endfor %}
+</body>
+
+</html>
+```
