@@ -270,3 +270,12 @@ if __name__ == '__main__':
 
 </html>
 ```
+
+### Adding GET and POST methods in method/routing definition:
+
+To add capability to handle GET/POST, we first need to add another argument in the routing which goes like:
+```
+@app.route('/restaurant/<int:restaurant_id>/new/', methods = ['GET', 'POST'])
+def newMenuItem(restaurant_id):
+    return "page to create a new menu item. Task 1 complete!"
+```
