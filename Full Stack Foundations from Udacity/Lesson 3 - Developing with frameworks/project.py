@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 #Import render template
 from flask import request, render_template
-#Import reredirect and url_for
+#Import reredirect and url_for and flasing
 from flask import redirect, url_for, flash
 
 
@@ -71,7 +71,7 @@ def deleteMenuItem(restaurant_id, menu_id):
     if request.method == 'POST':
         session.delete(deletedItem)
         session.commit()
-        flash("menu item deleted!")
+        flash("Menu Item has been deleted")
         return redirect(url_for('restaurantMenu', restaurant_id=restaurant_id))
     else:
         # USE THE RENDER_TEMPLATE FUNCTION BELOW TO SEE THE VARIABLES YOU
@@ -81,6 +81,6 @@ def deleteMenuItem(restaurant_id, menu_id):
 
 
 if __name__ == '__main__':
-	app.secret_key = 'super_secret_key'
+    app.secret_key = 'super_secret_key'
     app.debug = True
     app.run(host = '0.0.0.0', port = 5000)
