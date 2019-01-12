@@ -2,7 +2,20 @@
 
 <body>
 
-<a href = "{{url_for('newMenuItem', restaurant_id = restaurant.id) }}">Create New Item</a>
+<h1>{{restaurant.name}}</h1>
+
+<!--MESSAGE FLASHING EXAMPLE -->
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+
+<ul>
+{% for message in messages %}
+  <li><strong>{{message}}</strong></li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
 
 {% for i in items %}
 
@@ -10,21 +23,9 @@
 
 <p>{{i.name}}</p>
 
-</br>
-
 <p>{{i.description}}</p>
 
-</br>
-
 <p> {{i.price}} </p>
-
-</br>
-
-<a href="{{url_for('editMenuItem', restaurant_id = restaurant.id, menu_id = i.id) }}">Edit</a>
-
-</br>
-
-<a href = "{{url_for('deleteMenuItem', restaurant_id = restaurant.id, menu_id = i.id ) }}">Delete</a>
 
 </div>
 
