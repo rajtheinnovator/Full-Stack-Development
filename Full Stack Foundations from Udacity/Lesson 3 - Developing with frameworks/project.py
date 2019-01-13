@@ -8,14 +8,13 @@ from flask import request, render_template
 #Import reredirect and url_for and flasing
 from flask import redirect, url_for, flash, jsonify
 
-
 app = Flask(__name__)
 # Create session and connect to DB ##
 engine = create_engine('sqlite:///restaurantmenu.db')
 Base.metadata.bind = engine
 
 
-# ADD JSON API ENDPOINT HERE
+# JSON API ENDPOINT FOR RESTAURANT MENU LIST
 @app.route('/restaurants/<int:restaurant_id>/menu/JSON')
 def restaurantMenuJSON(restaurant_id):
     DBSession = sessionmaker(bind=engine)
@@ -24,6 +23,14 @@ def restaurantMenuJSON(restaurant_id):
     items = session.query(MenuItem).filter_by(
         restaurant_id=restaurant_id).all()
     return jsonify(MenuItems=[i.serialize for i in items])
+
+# JSON API ENDPOINT FOR SINGLE MENU ITEM
+@app.route('/restaurants/<int:restaurant_id>/menu/<int:menu_id>/JSON')
+def menuItemJSON(restaurant_id, menu_id):
+    DBSession = sessionmaker(bind=engine)
+    session = DBSession()
+    menuItem = session.query(MenuItem).filter_by(id=menu_id).one()
+    return jsonify(MenuItem=menuItem.serialize)
 
 
 @app.route('/')
