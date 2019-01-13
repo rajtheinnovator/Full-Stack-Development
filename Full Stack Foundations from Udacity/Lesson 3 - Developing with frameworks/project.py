@@ -6,13 +6,25 @@ from sqlalchemy.orm import sessionmaker
 #Import render template
 from flask import request, render_template
 #Import reredirect and url_for and flasing
-from flask import redirect, url_for, flash
+from flask import redirect, url_for, flash, jsonify
 
 
 app = Flask(__name__)
 # Create session and connect to DB ##
 engine = create_engine('sqlite:///restaurantmenu.db')
 Base.metadata.bind = engine
+
+
+# ADD JSON API ENDPOINT HERE
+@app.route('/restaurants/<int:restaurant_id>/menu/JSON')
+def restaurantMenuJSON(restaurant_id):
+    DBSession = sessionmaker(bind=engine)
+    session = DBSession()
+    restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+    items = session.query(MenuItem).filter_by(
+        restaurant_id=restaurant_id).all()
+    return jsonify(MenuItems=[i.serialize for i in items])
+
 
 @app.route('/')
 @app.route('/restaurants/<int:restaurant_id>/')
