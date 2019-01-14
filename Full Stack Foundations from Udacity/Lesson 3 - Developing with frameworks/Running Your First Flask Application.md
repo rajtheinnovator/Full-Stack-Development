@@ -318,7 +318,7 @@ def newMenuItem(restaurant_id):
     else:
         return render_template('newmenuitem.html', restaurant_id=restaurant_id)
 ```
-### Editing menu items using GET/POST method:
+### Editing menu item using GET/POST method:
 
 The html file required for editing `editmenuitem.html` is:
 ```
@@ -355,3 +355,44 @@ def editMenuItem(restaurant_id, menu_id):
         return render_template(
             'editmenuitem.html', restaurant_id=restaurant_id, menu_id=menu_id, item=editedItem)
 ```
+
+### Deleting a selected menu item using GET/POST method:
+
+The html file required for editing `deletemenuitem.html` is:
+
+```
+<html>
+
+<body>
+<h1> Are you sure you want to delete {{item.name}}? </h1>
+
+<form action="{{ url_for('deleteMenuItem', restaurant_id=item.restaurant_id, menu_id=item.id)}}" method = 'post'>
+
+<input type='submit', value = 'Delete'>
+
+
+
+
+</form>
+
+<a href = "{{ url_for('restaurantMenu', restaurant_id = item.restaurant_id)}}"> Cancel </a>
+</body>
+
+</html>
+```
+
+And for deleting function, we'll need both restaurant and menu IDs:
+
+```
+@app.route('/restaurants/<int:restaurant_id>/<int:menu_id>/delete',
+           methods=['GET', 'POST'])
+def deleteMenuItem(restaurant_id, menu_id):
+    itemToDelete = session.query(MenuItem).filter_by(id=menu_id).one()
+    if request.method == 'POST':
+        session.delete(itemToDelete)
+        session.commit()
+        return redirect(url_for('restaurantMenu', restaurant_id=restaurant_id))
+    else:
+        return render_template('deleteconfirmation.html', item=itemToDelete)
+```
+
