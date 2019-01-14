@@ -396,3 +396,76 @@ def deleteMenuItem(restaurant_id, menu_id):
         return render_template('deleteconfirmation.html', item=itemToDelete)
 ```
 
+### Adding message flashing to notify user that their response has been listened/handled:
+
+First import `flash` from `flask` and then add a special `secret_key` to make it work properly:
+
+```
+from flask import Flask, render_template, request, redirect, url_for, flash
+
+....
+if __name__ == '__main__':
+    app.secret_key = 'super_secret_key'
+    app.debug = True
+    app.run(host='0.0.0.0', port=5000)
+```
+
+And then to add a message, simply call `flash()` passing-in the message:
+
+```
+@app.route('/restaurants/<int:restaurant_id>/new', methods=['GET', 'POST'])
+def newMenuItem(restaurant_id):
+
+    if request.method == 'POST':
+        newItem = MenuItem(name=request.form['name'], description=request.form[
+                           'description'], price=request.form['price'], course=request.form['course'], restaurant_id=restaurant_id)
+        session.add(newItem)
+        session.commit()
+        flash("new menu item created!")
+        return redirect(url_for('restaurantMenu', restaurant_id=restaurant_id))
+    else:
+        return render_template('newmenuitem.html', restaurant_id=restaurant_id)
+```
+And now get that message to be displayed from python file and display using html file, where `menu.html` looks like:
+
+```
+<html>
+
+<body>
+
+<h1>{{restaurant.name}}</h1>
+
+<!--MESSAGE FLASHING EXAMPLE -->
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+
+<ul>
+{% for message in messages %}
+  <li><strong>{{message}}</strong></li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
+
+{% for i in items %}
+
+<div>
+
+<p>{{i.name}}</p>
+
+<p>{{i.description}}</p>
+
+<p> {{i.price}} </p>
+
+</div>
+
+
+{% endfor %}
+</body>
+
+</html>
+```
+
+
+
