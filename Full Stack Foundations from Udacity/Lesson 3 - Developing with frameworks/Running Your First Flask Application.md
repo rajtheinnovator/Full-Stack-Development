@@ -479,3 +479,53 @@ And then, we need to simply apply styles in our html file using:
 </head>
 ```
 
+### Adding API endpoints to respond with JSON response:
+
+First of all, we need to add a decorative method in our `database_setup` file so that it can return a JSON form of data:
+
+Inside `database_setup.py`:
+
+```
+class MenuItem(Base):
+    __tablename__ = 'menu_item'
+
+    name = Column(String(80), nullable=False)
+    id = Column(Integer, primary_key=True)
+    description = Column(String(250))
+    price = Column(String(8))
+    course = Column(String(250))
+    restaurant_id = Column(Integer, ForeignKey('restaurant.id'))
+    restaurant = relationship(Restaurant)
+
+# We added this serialize function to be able to send JSON objects in a
+# serializable format
+    @property
+    def serialize(self):
+
+        return {
+            'name': self.name,
+            'description': self.description,
+            'id': self.id,
+            'price': self.price,
+            'course': self.course,
+        }
+
+```
+
+And now, import `jsonify` from flask:
+
+```
+from flask import Flask, render_template, request, redirect, url_for, jsonify
+```
+
+Then create a endpoint method to return JSON response and `serialize` data before returning them:
+
+```
+@app.route('/restaurants/<int:restaurant_id>/menu/JSON')
+def restaurantMenuJSON(restaurant_id):
+    restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+    items = session.query(MenuItem).filter_by(
+        restaurant_id=restaurant_id).all()
+    return jsonify(MenuItems=[i.serialize for i in items])
+```
+
