@@ -183,7 +183,7 @@ The file `menu.html` looks like:
 
 </html>
 ```
-The contents of `projects.py` at this stage will look like(don't forget to import **render_template** from flask:
+The contents of `projects.py` at this stage will look like(don't forget to import **render_template** from flask):
 ```
 from flask import Flask
 
@@ -278,4 +278,43 @@ To add capability to handle GET/POST, we first need to add another argument in t
 @app.route('/restaurant/<int:restaurant_id>/new/', methods = ['GET', 'POST'])
 def newMenuItem(restaurant_id):
     return "page to create a new menu item. Task 1 complete!"
+```
+
+Then, make a form in the html file to accept users input:
+
+`newmenuitem.html`:
+```
+<html>
+<body>
+<h1> New Menu Item </h1>
+
+<form action="{{url_for('newMenuItem', restaurant_id=restaurant_id )}}" method = 'POST'>
+
+<p>Name:</p>
+
+<input type='text' size='30' name='name'>
+
+<input type='submit' value='Create'>
+
+</form>
+
+</body>
+</html>
+```
+And now, to finally make the form work, import `request` from `flask` in python file. Also make use of `redirect` method to redirect the page to menu items after new menu is created and hence import also `redirect` and `urel_for` from `flask`:
+
+```
+from flask import Flask, render_template, request, redirect, url_for
+
+...
+@app.route('/restaurant/<int:restaurant_id>/new/', methods=['GET', 'POST'])
+def newMenuItem(restaurant_id):
+    if request.method == 'POST':
+        newItem = MenuItem(
+            name=request.form['name'], restaurant_id=restaurant_id)
+        session.add(newItem)
+        session.commit()
+        return redirect(url_for('restaurantMenu', restaurant_id=restaurant_id))
+    else:
+        return render_template('newmenuitem.html', restaurant_id=restaurant_id)
 ```
