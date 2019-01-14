@@ -467,5 +467,15 @@ And now get that message to be displayed from python file and display using html
 </html>
 ```
 
+### Adding styles to stylyze the html output:
 
+Flask can read and apply CSS/JavaScript/Media files if they're put under a director named `static` at the same location as the python file.
+
+And then, we need to simply apply styles in our html file using:
+
+```
+<head>
+	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+</head>
+```
 
