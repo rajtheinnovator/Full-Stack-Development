@@ -7,9 +7,12 @@
 Log into your personal Github account, and fork the [fullstack-nanodegree-vm](https://github.com/udacity/fullstack-nanodegree-vm) so that you have a personal repo you can push to for backup. Later, you'll be able to use this repo for submitting your projects for review as well.
 
 #### *Clone the remote to your local machine*
-From the terminal, run the following command (be sure to replace <username> with your GitHub username): [git clone http://github.com/<username>/fullstack-nanodegree-vm fullstack]()
+From the terminal, run the following command (be sure to replace <username> with your GitHub username): [git clone http://github.com/`<username>`/fullstack-nanodegree-vm fullstack]()
 
 This will give you a directory named `fullstack` that is a clone of your remote `fullstack-nanodegree-vm` repository.
+
+#### *Inatall Vagrant*
+Vagrant can be instaleld from here: https://www.vagrantup.com/downloads.html
 
 #### *Run the virtual machine!*
 Using the terminal, change directory using the command `cd fullstack/vagrant`, then type `vagrant up` to launch your virtual machine.
